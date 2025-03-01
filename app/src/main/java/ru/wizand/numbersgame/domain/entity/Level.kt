@@ -1,7 +1,10 @@
 package ru.wizand.numbersgame.domain.entity
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
-enum class Level {
+@Parcelize
+enum class Level: Parcelable {
 
     TEST, EASY, NORMAL, HARD
 }

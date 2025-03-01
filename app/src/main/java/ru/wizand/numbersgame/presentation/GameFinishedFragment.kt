@@ -42,8 +42,10 @@ class GameFinishedFragment : Fragment() {
                 override fun handleOnBackPressed() {
                     retryGame()
                 }
-            }
-        )
+            })
+        binding.buttonRetry.setOnClickListener {
+            retryGame()
+        }
     }
 
     override fun onDestroyView() {
@@ -53,12 +55,12 @@ class GameFinishedFragment : Fragment() {
 
     private fun parseArgs() {
 
-//        level = requireArguments().getSerializable(KEY_LEVEL, Level::class.java) as Level
+//        level = requireArguments().getSerializable(KEY_LEVEL, Level::class.java) as
 
         gameResult = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU) {
-            requireArguments().getSerializable(KEY_GAME_RESULT, GameResult::class.java)
+            requireArguments().getParcelable(KEY_GAME_RESULT, GameResult::class.java)
         } else {
-            requireArguments().getSerializable(KEY_GAME_RESULT) as? GameResult
+            requireArguments().getParcelable(KEY_GAME_RESULT) as? GameResult
         } ?: throw RuntimeException("GameResult is null")
     }
 
@@ -76,7 +78,7 @@ class GameFinishedFragment : Fragment() {
         fun newInstance(gameResult: GameResult): GameFinishedFragment {
             return GameFinishedFragment().apply {
                 arguments = Bundle().apply {
-                    putSerializable(KEY_GAME_RESULT, gameResult)
+                    putParcelable(KEY_GAME_RESULT, gameResult)
                 }
             }
         }
