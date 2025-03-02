@@ -46,7 +46,7 @@ The following screenshots illustrate key parts of the application:
 |:-------------------------------------:|:-------------------------------------:|  
 | ![screenshot](images/screenshot1.png) | ![screenshot](images/screenshot3.png) |  
 
-|                 Apps                  |              Dark Theme               |  
+|                 Game                  |              Dark Theme               |  
 |:-------------------------------------:|:-------------------------------------:|  
 | ![screenshot](images/screenshot4.png) | ![screenshot](images/screenshot2.png) |  
 
