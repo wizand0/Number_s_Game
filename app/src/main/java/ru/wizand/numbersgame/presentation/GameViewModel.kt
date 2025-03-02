@@ -5,7 +5,6 @@ import android.os.CountDownTimer
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import ru.wizand.numbersgame.R
 import ru.wizand.numbersgame.data.GameRepositoryImpl
 import ru.wizand.numbersgame.domain.entity.GameResult
