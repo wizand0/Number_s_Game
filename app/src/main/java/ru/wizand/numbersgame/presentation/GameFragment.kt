@@ -62,17 +62,33 @@ class GameFragment : Fragment() {
         _binding = null
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+//    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+//    private fun parseArgs() {
+//
+////        level = requireArguments().getSerializable(KEY_LEVEL, Level::class.java) as Level
+//
+//        level = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU) {
+//            requireArguments().getParcelable(KEY_LEVEL, Level::class.java)
+//        } else {
+//            requireArguments().getParcelable(KEY_LEVEL, Level::class.java) as? Level
+//        } ?: throw RuntimeException("Level is null")
+//    }
+
+
     private fun parseArgs() {
+        val args = requireArguments()
 
-//        level = requireArguments().getSerializable(KEY_LEVEL, Level::class.java) as Level
-
-        level = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU) {
-            requireArguments().getParcelable(KEY_LEVEL, Level::class.java)
+        // Используйте getParcelable без второго аргумента
+        level = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            args.getParcelable(KEY_LEVEL, Level::class.java) ?: throw IllegalArgumentException(
+                "Level is required"
+            )
         } else {
-            requireArguments().getParcelable(KEY_LEVEL, Level::class.java) as? Level
-        } ?: throw RuntimeException("Level is null")
+            @Suppress("DEPRECATION")
+            args.getParcelable(KEY_LEVEL) ?: throw IllegalArgumentException("Level is required")
+        }
     }
+
 
     private fun launchGameFinishedFragment(gameResult: GameResult) {
         requireActivity().supportFragmentManager.beginTransaction()
