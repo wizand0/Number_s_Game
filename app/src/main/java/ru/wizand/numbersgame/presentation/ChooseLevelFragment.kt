@@ -9,7 +9,6 @@ import androidx.navigation.fragment.findNavController
 import ru.wizand.numbersgame.R
 import ru.wizand.numbersgame.databinding.FragmentChooseLevelBinding
 import ru.wizand.numbersgame.domain.entity.Level
-import ru.wizand.numbersgame.presentation.GameFragment.Companion.KEY_LEVEL
 
 class ChooseLevelFragment : Fragment() {
 
@@ -65,25 +64,15 @@ class ChooseLevelFragment : Fragment() {
     }
 
     private fun launchGameFragment(level: Level) {
-        val args = Bundle().apply {
-            putParcelable(KEY_LEVEL, level)
-        }
-        findNavController().navigate(R.id.action_chooseLevelFragment_to_gameFragment, args)
 
-
-
+        findNavController().navigate(
+            ChooseLevelFragmentDirections.actionChooseLevelFragmentToGameFragment(level)
+        )
 //        requireActivity().supportFragmentManager.beginTransaction()
 //            .replace(R.id.main_container, GameFragment.newInstance(level))
 //            .addToBackStack(GameFragment.NAME)
 //            .commit()
     }
 
-    companion object {
 
-        const val NAME = "ChooseLevelFragment"
-
-        fun newInstance(): ChooseLevelFragment {
-            return ChooseLevelFragment()
-        }
-    }
 }
