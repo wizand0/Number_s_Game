@@ -3,28 +3,30 @@ package ru.wizand.numbersgame.presentation
 import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import ru.wizand.numbersgame.R
+import androidx.navigation.fragment.navArgs
 import ru.wizand.numbersgame.databinding.FragmentGameBinding
 import ru.wizand.numbersgame.domain.entity.GameResult
-import ru.wizand.numbersgame.domain.entity.GameSettings
-import ru.wizand.numbersgame.domain.entity.Level
-import ru.wizand.numbersgame.presentation.GameFinishedFragment.Companion.KEY_GAME_RESULT
 
 
 class GameFragment : Fragment() {
 
-    private lateinit var level: Level
+    // Или так
+    private val args by navArgs<GameFragmentArgs>()
+
+    //    private lateinit var level: Level
     private val viewModelFactory by lazy {
-        GameViewModelFactory(level, requireActivity().application)
+        // или так
+//        val args = GameFragmentArgs.fromBundle(requireArguments())
+        GameViewModelFactory(args.level, requireActivity().application)
     }
     private val viewModel: GameViewModel by lazy {
         ViewModelProvider(this, viewModelFactory)[GameViewModel::class.java]
@@ -41,23 +43,23 @@ class GameFragment : Fragment() {
         }
     }
 
-    private var  _binding: FragmentGameBinding? = null
-    private val  binding: FragmentGameBinding
+    private var _binding: FragmentGameBinding? = null
+    private val binding: FragmentGameBinding
         get() = _binding ?: throw RuntimeException("FragmentGameBinding == null")
 
-//    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    //    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        parseArgs()
-    }
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        parseArgs()
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentGameBinding.inflate(inflater,container, false)
+        _binding = FragmentGameBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -86,7 +88,7 @@ class GameFragment : Fragment() {
             }
         }
         viewModel.percentOfRightAnswers.observe(viewLifecycleOwner) {
-            binding.progressBar.setProgress(it,true)
+            binding.progressBar.setProgress(it, true)
         }
         viewModel.enoughCountOfRightAnswers.observe(viewLifecycleOwner) {
             binding.tvAnswersProgress.setTextColor(getColorByState(it))
@@ -136,44 +138,25 @@ class GameFragment : Fragment() {
 //    }
 
 
-    private fun parseArgs() {
-        val args = requireArguments()
-
-        // Используйте getParcelable без второго аргумента
-        level = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            args.getParcelable(KEY_LEVEL, Level::class.java) ?: throw IllegalArgumentException(
-                "Level is required"
-            )
-        } else {
-            @Suppress("DEPRECATION")
-            args.getParcelable(KEY_LEVEL) ?: throw IllegalArgumentException("Level is required")
-        }
-    }
+//    private fun parseArgs() {
+//        val args = requireArguments()
+//
+//        // Используйте getParcelable без второго аргумента
+//        level = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//            args.getParcelable(KEY_LEVEL, Level::class.java) ?: throw IllegalArgumentException(
+//                "Level is required"
+//            )
+//        } else {
+//            @Suppress("DEPRECATION")
+//            args.getParcelable(KEY_LEVEL) ?: throw IllegalArgumentException("Level is required")
+//        }
+//    }
 
 
     private fun launchGameFinishedFragment(gameResult: GameResult) {
-        val args = Bundle().apply {
-            putParcelable(KEY_GAME_RESULT, gameResult)
-        }
-        findNavController().navigate(R.id.action_gameFragment_to_gameFinishedFragment, args)
+        findNavController().navigate(
+            GameFragmentDirections.actionGameFragmentToGameFinishedFragment(gameResult)
+        )
 
-//        requireActivity().supportFragmentManager.beginTransaction()
-//            .replace(R.id.main_container, GameFinishedFragment.newInstance(gameResult))
-//            .addToBackStack(null)
-//            .commit()
-    }
-
-    companion object {
-
-        const val NAME = "GameFragment"
-
-        const val KEY_LEVEL = "level"
-        fun newInstance(level: Level): GameFragment {
-            return GameFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(KEY_LEVEL, level)
-                }
-            }
-        }
     }
 }
